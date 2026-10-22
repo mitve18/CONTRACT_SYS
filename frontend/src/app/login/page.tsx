@@ -3,6 +3,17 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+/** Resolve ?next= against this site and keep it only if it stays on the same origin. */
+function safeNext(raw: string | null): string {
+  if (!raw || /[\\\u0000-\u001f]/.test(raw)) return "/";
+  try {
+    const url = new URL(raw, window.location.origin);
+    return url.origin === window.location.origin ? `${url.pathname}${url.search}${url.hash}` : "/";
+  } catch {
+    return "/";
+  }
+}
+
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
@@ -20,10 +31,7 @@ function LoginForm() {
       body: JSON.stringify({ password }),
     });
     setBusy(false);
-    // Only same-site paths, so a crafted ?next= link can't send users to another site.
-    const raw = params.get("next") || "/";
-    const next = raw.startsWith("/") && !raw.startsWith("//") && !raw.startsWith("/\\") ? raw : "/";
-    if (res.ok) router.replace(next);
+    if (res.ok) router.replace(safeNext(params.get("next")));
     else setError("הסיסמה שגויה. נסו שוב.");
   }
 
