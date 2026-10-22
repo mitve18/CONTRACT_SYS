@@ -95,7 +95,11 @@ class Settings(BaseSettings):
         Any of those makes HTTP headers invalid ("Connection error."), so strip them."""
         if not isinstance(value, str):
             return value
-        cleaned = _INVISIBLE.sub("", value).strip().strip("\"'").strip()
+        # A multi-line paste (e.g. two lines copied from .env) keeps only its first line.
+        first = next((line for line in value.splitlines() if line.strip()), "")
+        if "=" in first and first.split("=", 1)[0].strip().isupper():
+            first = first.split("=", 1)[1]  # "OPENAI_API_KEY=sk-..." pasted whole
+        cleaned = _INVISIBLE.sub("", first).strip("\"'")
         return cleaned or None
 
     @property

@@ -223,3 +223,9 @@ def test_pasted_secrets_are_cleaned():
     assert s.openai_api_key == "sk-abc123"
     assert s.google_drive_folder_id == "1AbC"
     assert s.sqlalchemy_url == "postgresql+psycopg://u:p@h/db"
+    pasted = Settings(openai_api_key="sk-proj-XYZ
+LOG_LEVEL=INFO
+", _env_file=None)
+    assert pasted.openai_api_key == "sk-proj-XYZ"
+    whole_line = Settings(openai_api_key="OPENAI_API_KEY=sk-proj-XYZ", _env_file=None)
+    assert whole_line.openai_api_key == "sk-proj-XYZ"
