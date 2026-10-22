@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 /** Resolve ?next= against this site and keep it only if it stays on the same origin. */
 function safeNext(raw: string | null): string {
-  if (!raw || /[\\\u0000-\u001f]/.test(raw)) return "/";
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//") || /[\\\u0000-\u001f]/.test(raw)) return "/";
   try {
     const url = new URL(raw, window.location.origin);
-    return url.origin === window.location.origin ? `${url.pathname}${url.search}${url.hash}` : "/";
+    // A normalized path like "//evil.com" would be read as another host.
+    if (url.origin !== window.location.origin || url.pathname.startsWith("//")) return "/";
+    return `${url.pathname}${url.search}${url.hash}`;
   } catch {
     return "/";
   }
