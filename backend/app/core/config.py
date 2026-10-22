@@ -10,7 +10,7 @@ from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
-_INVISIBLE = re.compile(r"[\s​-‏‪-‮⁦-⁩﻿]")
+_INVISIBLE = re.compile(r"[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]")
 REPO_DIR = BACKEND_DIR.parent
 
 
