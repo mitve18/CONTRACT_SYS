@@ -26,6 +26,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Public static assets (emblem, icons) stay reachable so the login screen can show them.
-  matcher: ["/((?!_next/static|_next/image|.*\\.(?:png|svg|ico|jpg|webp)$).*)"],
+  // Only these named public files skip the gate (the login screen needs the emblem and icons).
+  matcher: ["/((?!_next/static|_next/image|emblem\\.png$|icon\\.png$|apple-icon\\.png$|favicon\\.ico$).*)"],
 };
