@@ -17,8 +17,8 @@ const plex = IBM_Plex_Sans_Hebrew({
 });
 
 export const metadata: Metadata = {
-  title: "ארכיון החוזים | יחידת מתוו״ה",
-  description: "חיפוש, שאלות וניסוח חוזים על בסיס מאגר החוזים של הארגון",
+  title: "מערכת חוזים והתחייבויות | יחידת מתוו״ה",
+  description: "שאלות על כל מסמך וטיוטות להסכמים חדשים, על בסיס החוזים וההתחייבויות של יחידת מתוו״ה",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

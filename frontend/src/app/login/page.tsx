@@ -41,7 +41,7 @@ function LoginForm() {
   return (
     <form onSubmit={submit} className="rise w-full max-w-[360px]">
       <Image src="/emblem.png" alt="" width={295} height={745} className="mb-8 h-20 w-auto lg:hidden" />
-      <h1 className="font-serif text-[38px] leading-tight font-bold tracking-tight">כניסה לארכיון</h1>
+      <h1 className="font-serif text-[38px] leading-tight font-bold tracking-tight">כניסה למערכת</h1>
       <p className="mt-2 text-[15.5px] text-muted">הזינו את סיסמת הצוות כדי להמשיך.</p>
       <label className="mt-9 block text-[14px] font-medium" htmlFor="password">
         סיסמה
@@ -78,7 +78,7 @@ export default function LoginPage() {
       <section className="field relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between lg:p-14">
         <div className="relative z-10 text-white">
           <p className="text-[15px] text-lavender">יחידת מתוו״ה</p>
-          <p className="mt-3 max-w-md font-serif text-[46px] leading-[1.1] font-bold tracking-tight">ארכיון החוזים וההתחייבויות</p>
+          <p className="mt-3 max-w-md font-serif text-[46px] leading-[1.1] font-bold tracking-tight">מערכת חוזים והתחייבויות</p>
           <p className="mt-4 max-w-sm text-[16px] leading-relaxed text-white/70">
             כל ההסכמים, כתבי ההתחייבות וחוות הדעת של היחידה, במקום אחד שאפשר לשאול אותו.
           </p>

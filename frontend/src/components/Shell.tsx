@@ -8,7 +8,7 @@ import { FilePlus2, Files, Gauge, Library, Menu, MessageSquareText, RefreshCw, X
 import { api, relativeTime, type Overview } from "@/lib/api";
 
 const NAV = [
-  { href: "/", label: "שאלו את הארכיון", icon: MessageSquareText },
+  { href: "/", label: "שאלו על המסמכים", icon: MessageSquareText },
   { href: "/contracts", label: "חוזים", icon: Library },
   { href: "/draft", label: "הסכם חדש", icon: FilePlus2 },
   { href: "/drafts", label: "טיוטות", icon: Files },
@@ -93,7 +93,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           className="h-[58px] w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
         />
         <span>
-          <span className="block font-serif text-[23px] leading-none font-bold tracking-tight text-white">ארכיון החוזים</span>
+          <span className="block font-serif text-[21px] leading-[1.15] font-bold tracking-tight text-white">מערכת חוזים והתחייבויות</span>
           <span className="mt-1.5 block text-[13px] text-lavender">יחידת מתוו״ה</span>
         </span>
       </Link>
@@ -146,7 +146,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <header className="field sticky top-0 z-30 flex items-center justify-between px-4 py-2.5 lg:hidden">
         <Link href="/" className="flex items-center gap-2.5 font-serif text-xl font-bold text-white">
           <Image src="/emblem.png" alt="" width={295} height={745} className="h-9 w-auto" />
-          ארכיון החוזים
+          חוזים והתחייבויות
         </Link>
         <button
           onClick={() => setOpen(true)}

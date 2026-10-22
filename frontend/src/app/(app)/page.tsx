@@ -209,7 +209,7 @@ function ChatPage() {
           <div className="min-w-0">
           <p className="rise mb-5 inline-flex items-center gap-2 rounded-full bg-lavender-soft px-3 py-1 text-[13px] font-medium text-violet">
             <span className="size-1.5 rounded-full bg-ink-soft" aria-hidden />
-            יחידת מתוו״ה, ארכיון החוזים וההתחייבויות
+            יחידת מתוו״ה, מערכת חוזים והתחייבויות
           </p>
           <h1 className="rise rise-2 max-w-2xl font-serif text-[42px] leading-[1.1] font-bold tracking-tight sm:text-[58px]">
             מה תרצו לדעת על החוזים?
