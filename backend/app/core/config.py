@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import re
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
+_INVISIBLE = re.compile(r"[\s​-‏‪-‮⁦-⁩﻿]")
 REPO_DIR = BACKEND_DIR.parent
 
 
@@ -76,6 +79,24 @@ class Settings(BaseSettings):
     enable_scheduler: bool = False
     sync_cron_hour: int = 2
     timezone: str = "Asia/Jerusalem"
+
+    @field_validator(
+        "openai_api_key",
+        "anthropic_api_key",
+        "tavily_api_key",
+        "api_key",
+        "database_url",
+        "google_drive_folder_id",
+        mode="before",
+    )
+    @classmethod
+    def _clean_secret(cls, value: object) -> object:
+        """Pasted secrets often carry a newline, quotes or invisible RTL marks.
+        Any of those makes HTTP headers invalid ("Connection error."), so strip them."""
+        if not isinstance(value, str):
+            return value
+        cleaned = _INVISIBLE.sub("", value).strip().strip("\"'").strip()
+        return cleaned or None
 
     @property
     def provider(self) -> str:

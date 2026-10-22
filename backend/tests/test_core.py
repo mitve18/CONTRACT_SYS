@@ -211,3 +211,15 @@ def test_parse_partial_draft_does_not_fail():
 
     d = parse_draft(DRAFT_TEXT[:120])
     assert d.title == "הסכם ייעוץ הנדסי"
+
+
+def test_pasted_secrets_are_cleaned():
+    s = Settings(
+        openai_api_key='  "sk-abc123"\n',
+        google_drive_folder_id="\u200f1AbC\u200e ",
+        database_url="postgresql://u:p@h/db\n",
+        _env_file=None,
+    )
+    assert s.openai_api_key == "sk-abc123"
+    assert s.google_drive_folder_id == "1AbC"
+    assert s.sqlalchemy_url == "postgresql+psycopg://u:p@h/db"
