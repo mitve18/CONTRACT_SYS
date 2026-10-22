@@ -1,0 +1,96 @@
+# Render Blueprint: database, API, nightly sync and the web app.
+# Deploy: Render Dashboard > New > Blueprint > pick this repo.
+# Secrets marked sync:false are entered in the dashboard on first deploy.
+# The Google service account JSON goes in as a Secret File named service_account.json
+# on both contracts-api and contracts-sync (it is read from /etc/secrets/service_account.json).
+
+databases:
+  - name: contracts-db
+    plan: basic-256mb
+    databaseName: contracts
+    user: contracts
+    region: frankfurt
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: contracts-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    region: frankfurt
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: contracts-db
+          property: connectionString
+      - key: API_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_PATH
+        value: MITVE TOOLS/NECHASIM/CONTRACTS
+      - key: CORS_ORIGINS
+        value: https://contracts-web.onrender.com
+      - key: DAILY_TOKEN_BUDGET
+        value: "2000000"
+
+  # Nightly sync at 02:00 Israel time (23:00 UTC in winter, 00:00 in summer is close enough).
+  - type: cron
+    name: contracts-sync
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerCommand: python -m app.jobs.sync nightly
+    region: frankfurt
+    plan: starter
+    schedule: "0 23 * * *"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: contracts-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_PATH
+        value: MITVE TOOLS/NECHASIM/CONTRACTS
+
+  - type: web
+    name: contracts-web
+    runtime: node
+    rootDir: frontend
+    region: frankfurt
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: contracts-api
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: BACKEND_API_KEY
+        fromService:
+          type: web
+          name: contracts-api
+          envVarKey: API_KEY
+      - key: APP_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true

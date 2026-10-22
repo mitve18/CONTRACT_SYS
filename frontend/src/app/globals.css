@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* Ink on paper, with a highlighter for anything the system cites. */
+:root {
+  --ink: #1b2440;
+  --ink-soft: #2e3a63;
+  --paper: #f3f4f0;
+  --sheet: #ffffff;
+  --rule: #d9dbd2;
+  --rule-strong: #c3c6bb;
+  --muted: #5f6577;
+  --marker: #ffe45c;
+  --marker-soft: #fff4b8;
+  --danger: #a3341f;
+  --danger-soft: #f8e4df;
+  --ok: #2c6a4d;
+  --ok-soft: #e1efe7;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-sheet: var(--sheet);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-muted: var(--muted);
+  --color-marker: var(--marker);
+  --color-marker-soft: var(--marker-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --font-sans: var(--font-plex), system-ui, sans-serif;
+  --font-serif: var(--font-frank), "David", serif;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-plex), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--marker);
+  color: var(--ink);
+}
+
+/* In the base layer so utilities like focus-visible:outline-none can override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Highlighter stroke: slightly uneven, like a real marker pass. */
+.marker {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0.2em,
+    var(--marker) 0.35em,
+    var(--marker) calc(100% - 0.4em),
+    transparent calc(100% - 0.15em)
+  );
+  background-size: 100% 62%;
+  background-position: 0 70%;
+  background-repeat: no-repeat;
+  padding: 0 0.15em;
+}
+
+.sheet {
+  background: var(--sheet);
+  box-shadow:
+    0 1px 0 var(--rule),
+    0 18px 40px -28px rgb(27 36 64 / 0.35);
+}
+
+/* Contract typography */
+.contract {
+  font-family: var(--font-frank), "David", serif;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.prose-answer p {
+  margin: 0 0 0.75em;
+}
+.prose-answer ul,
+.prose-answer ol {
+  margin: 0 0 0.75em;
+  padding-inline-start: 1.25em;
+}
+.prose-answer ul {
+  list-style: disc;
+}
+.prose-answer ol {
+  list-style: decimal;
+}
+.prose-answer li {
+  margin: 0.2em 0;
+}
+.prose-answer strong {
+  font-weight: 600;
+}
+.prose-answer blockquote {
+  border-inline-start: 3px solid var(--marker);
+  padding-inline-start: 0.9em;
+  margin: 0.6em 0;
+  font-family: var(--font-frank), serif;
+  font-size: 1.04em;
+}
+.prose-answer table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6em 0 1em;
+  font-size: 0.93em;
+}
+.prose-answer th,
+.prose-answer td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.45em 0.6em;
+  text-align: start;
+  vertical-align: top;
+}
+.prose-answer th {
+  font-weight: 600;
+  border-bottom-color: var(--rule-strong);
+}
+
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-inline-start: 2px;
+  vertical-align: -0.12em;
+  background: var(--marker);
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes sweep {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.sweep {
+  transform-origin: right;
+  animation: sweep 1.6s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret::after,
+  .sweep {
+    animation: none;
+  }
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
