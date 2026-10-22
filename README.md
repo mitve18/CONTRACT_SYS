@@ -73,15 +73,39 @@ cd frontend && npm install && npm run dev      # http://localhost:3000
 3. מגדירים את `GOOGLE_DRIVE_FOLDER_ID`. אם הוא ריק, המערכת מאתרת את התיקייה לפי הנתיב.
 4. במסך "סנכרון" לוחצים **סנכרון עכשיו**.
 
-## פריסה ל-Render
+## פריסה בחינם: Neon, Render ו-GitHub Actions
 
-הקובץ `render.yaml` מגדיר את כל מה שצריך: Postgres, API (Docker עם Tesseract בעברית), Cron Job לילי ואתר Next.js.
+| רכיב | איפה | עלות |
+|---|---|---|
+| מסד נתונים (Postgres + pgvector) | Neon | חינם. הנתונים נשמרים |
+| שרת ה-API (Docker עם Tesseract בעברית) ואתר Next.js | Render, `render.yaml` | חינם. השרתים נרדמים אחרי כ-15 דקות בלי שימוש |
+| סנכרון לילי | GitHub Actions, `.github/workflows/nightly-sync.yml` | חינם |
 
-1. מעלים את הריפו ל-GitHub.
-2. ב-Render: **New > Blueprint** ובוחרים את הריפו.
-3. ממלאים את הסודות שהשדה `sync:false` מסמן אותם: `OPENAI_API_KEY`, `GOOGLE_DRIVE_FOLDER_ID`, `APP_PASSWORD`.
-4. ב-`contracts-api` וב-`contracts-sync` מוסיפים **Secret File** בשם `service_account.json`.
-5. אחרי הפריסה הראשונה פותחים את האתר, נכנסים עם הסיסמה, ומריצים סנכרון.
+**1. Neon**
+1. נרשמים ב-https://neon.com ויוצרים פרויקט (Region: Frankfurt).
+2. ב-**Connect** מכבים את **Connection pooling** ומעתיקים את ה-connection string. צריך את החיבור הישיר, כי הסנכרון משתמש בנעילה של Postgres.
+
+**2. Render** (בלי כרטיס אשראי)
+1. **New > Blueprint**, בוחרים את הריפו ואת הענף.
+2. ממלאים את הסודות:
+   - `DATABASE_URL`: מ-Neon.
+   - `OPENAI_API_KEY`.
+   - `GOOGLE_DRIVE_FOLDER_ID`.
+   - `APP_PASSWORD`: סיסמת הצוות.
+3. ב-`contracts-api`, תחת **Environment**, מוסיפים **Secret File** בשם `service_account.json`.
+
+**3. GitHub Actions** (הסנכרון הלילי)
+1. בריפו: **Settings > Secrets and variables > Actions > New repository secret**, ומוסיפים:
+   - `DATABASE_URL`.
+   - `OPENAI_API_KEY`.
+   - `GOOGLE_DRIVE_FOLDER_ID`.
+   - `GOOGLE_SERVICE_ACCOUNT_JSON`: מדביקים את כל התוכן של קובץ ה-JSON.
+2. הריצה המתוזמנת פועלת רק מהענף `main`, ולכן צריך למזג אליו.
+3. כדי לבדוק: **Actions > Nightly contract sync > Run workflow**.
+
+אחרי הסנכרון הראשון פותחים את האתר ונכנסים עם הסיסמה.
+
+גרסה בתשלום, שבה הכול זמין תמיד ונמצא ב-Render, נמצאת ב-`render.paid.yaml`. העלות שלה כ-20$ לחודש.
 
 ## בדיקות
 
