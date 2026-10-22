@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
@@ -72,22 +73,39 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const last = overview?.last_sync;
 
   const sidebar = (
-    <div className="flex h-full flex-col px-3 py-6">
-      <Link href="/" className="px-3">
-        <span className="block font-serif text-[26px] leading-none font-bold tracking-tight text-white">
-          ארכיון החוזים
+    <div className="relative flex h-full flex-col overflow-hidden px-3 py-6">
+      {/* The emblem, very faint, anchoring the bottom of the sidebar. */}
+      <Image
+        src="/emblem.png"
+        alt=""
+        width={295}
+        height={745}
+        aria-hidden
+        className="pointer-events-none absolute -bottom-24 -left-16 w-[230px] opacity-[0.07] select-none"
+      />
+      <Link href="/" className="relative flex items-center gap-3 px-3">
+        <Image
+          src="/emblem.png"
+          alt="סמל יחידת מתוו״ה"
+          width={295}
+          height={745}
+          priority
+          className="h-[58px] w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
+        />
+        <span>
+          <span className="block font-serif text-[23px] leading-none font-bold tracking-tight text-white">ארכיון החוזים</span>
+          <span className="mt-1.5 block text-[13px] text-lavender">יחידת מתוו״ה</span>
         </span>
-        <span className="mt-1.5 block text-[13px] text-white/50">מתווה נכסים</span>
       </Link>
 
-      <nav className="mt-9 space-y-0.5" aria-label="ניווט ראשי">
+      <nav className="relative mt-9 space-y-0.5" aria-label="ניווט ראשי">
         {NAV.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
             href={href}
             aria-current={isActive(href) ? "page" : undefined}
             className={`group flex items-center gap-3 rounded-md px-3 py-2 text-[14.5px] transition-colors ${
-              isActive(href) ? "bg-white text-ink" : "text-white/80 hover:bg-white/8 hover:text-white"
+              isActive(href) ? "bg-white text-ink shadow-[0_6px_18px_-8px_rgba(0,0,0,0.45)]" : "text-white/80 hover:bg-white/8 hover:text-white"
             }`}
           >
             <Icon size={17} strokeWidth={1.75} aria-hidden />
@@ -96,13 +114,13 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         ))}
       </nav>
 
-      <div className="scrollbar-thin min-h-0 flex-1 overflow-y-auto">
+      <div className="scrollbar-thin relative min-h-0 flex-1 overflow-y-auto">
         <Suspense>
           <Recent conversations={conversations} onNavigate={() => setOpen(false)} />
         </Suspense>
       </div>
 
-      <Link href="/sync" className="mt-4 block rounded-md px-3 py-3 text-[13px] text-white/60 hover:bg-white/6">
+      <Link href="/sync" className="relative mt-4 block rounded-md border border-white/10 bg-white/5 px-3 py-3 text-[13px] text-white/60 backdrop-blur-sm hover:bg-white/10">
         <span className="flex items-center gap-2 text-white/85">
           <span
             className={`size-2 rounded-full ${
@@ -123,10 +141,11 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[248px_1fr]">
-      <aside className="sticky top-0 hidden h-dvh bg-ink lg:block">{sidebar}</aside>
+      <aside className="field sticky top-0 hidden h-dvh lg:block">{sidebar}</aside>
 
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-ink px-4 py-3 lg:hidden">
-        <Link href="/" className="font-serif text-xl font-bold text-white">
+      <header className="field sticky top-0 z-30 flex items-center justify-between px-4 py-2.5 lg:hidden">
+        <Link href="/" className="flex items-center gap-2.5 font-serif text-xl font-bold text-white">
+          <Image src="/emblem.png" alt="" width={295} height={745} className="h-9 w-auto" />
           ארכיון החוזים
         </Link>
         <button
@@ -141,10 +160,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
           <button className="absolute inset-0 bg-ink/40" aria-label="סגירת תפריט" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 right-0 w-[280px] bg-ink">
+          <aside className="field absolute inset-y-0 right-0 w-[280px]">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-5 left-4 rounded-md p-1.5 text-white/70 hover:bg-white/10"
+              className="absolute top-5 left-4 z-10 rounded-md p-1.5 text-white/70 hover:bg-white/10"
               aria-label="סגירה"
             >
               <X size={18} />

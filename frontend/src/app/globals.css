@@ -2,13 +2,17 @@
 
 /* Ink on paper, with a highlighter for anything the system cites. */
 :root {
-  --ink: #1b2440;
-  --ink-soft: #2e3a63;
-  --paper: #f3f4f0;
+  /* From the unit emblem: deep indigo field, arrow blue, lavender map, violet shadow. */
+  --ink: #1e2454;
+  --ink-soft: #283891;
+  --lavender: #9b9abc;
+  --lavender-soft: #ecebf4;
+  --violet: #3b3969;
+  --paper: #f4f4f8;
   --sheet: #ffffff;
-  --rule: #d9dbd2;
-  --rule-strong: #c3c6bb;
-  --muted: #5f6577;
+  --rule: #dcdce6;
+  --rule-strong: #c5c5d4;
+  --muted: #5d5f78;
   --marker: #ffe45c;
   --marker-soft: #fff4b8;
   --danger: #a3341f;
@@ -20,6 +24,9 @@
 @theme inline {
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-lavender: var(--lavender);
+  --color-lavender-soft: var(--lavender-soft);
+  --color-violet: var(--violet);
   --color-paper: var(--paper);
   --color-sheet: var(--sheet);
   --color-rule: var(--rule);
@@ -177,4 +184,37 @@ body {
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--rule-strong) transparent;
+}
+
+/* Sidebar: the emblem field, with a faint lavender light from the top. */
+.field {
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgb(155 154 188 / 0.18), transparent 60%),
+    linear-gradient(180deg, #232a5e 0%, var(--ink) 45%, #181d46 100%);
+}
+
+/* One orchestrated entrance on the home screen. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.rise-2 {
+  animation-delay: 0.12s;
+}
+.rise-3 {
+  animation-delay: 0.24s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
 }

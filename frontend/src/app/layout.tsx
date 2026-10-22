@@ -17,7 +17,7 @@ const plex = IBM_Plex_Sans_Hebrew({
 });
 
 export const metadata: Metadata = {
-  title: "ארכיון החוזים",
+  title: "ארכיון החוזים | יחידת מתוו״ה",
   description: "חיפוש, שאלות וניסוח חוזים על בסיס מאגר החוזים של הארגון",
 };
 

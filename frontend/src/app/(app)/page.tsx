@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -204,15 +205,32 @@ function ChatPage() {
       </div>
 
       {empty ? (
-        <section className="flex flex-1 flex-col justify-center pb-10">
-          <h1 className="max-w-2xl font-serif text-[40px] leading-[1.15] font-bold tracking-tight sm:text-[52px]">
+        <section className="relative grid flex-1 items-center gap-10 pb-10 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="min-w-0">
+          <p className="rise mb-5 inline-flex items-center gap-2 rounded-full bg-lavender-soft px-3 py-1 text-[13px] font-medium text-violet">
+            <span className="size-1.5 rounded-full bg-ink-soft" aria-hidden />
+            יחידת מתוו״ה, ארכיון החוזים וההתחייבויות
+          </p>
+          <h1 className="rise rise-2 max-w-2xl font-serif text-[42px] leading-[1.1] font-bold tracking-tight sm:text-[58px]">
             מה תרצו לדעת על החוזים?
           </h1>
-          <p className="mt-4 max-w-xl text-[16px] text-muted">
-            {overview && overview.indexed > 0
-              ? `התשובות מבוססות על ${formatNumber(overview.indexed)} חוזים במאגר, ולכל טענה יש הפניה לסעיף ולעמוד שממנו היא נלקחה.`
-              : "התשובות מבוססות על החוזים שבתיקיית Drive, ולכל טענה יש הפניה לסעיף ולעמוד שממנו היא נלקחה."}
+          <p className="rise rise-3 mt-5 max-w-xl text-[16.5px] leading-relaxed text-muted">
+            שאלו בשפה חופשית. כל תשובה נשענת על המסמכים במאגר, ולכל טענה יש הפניה לסעיף ולעמוד שממנו היא נלקחה.
           </p>
+          {overview && overview.indexed > 0 && (
+            <dl className="rise rise-3 mt-8 flex flex-wrap gap-x-6 gap-y-4 sm:gap-x-10">
+              {[
+                [formatNumber(overview.indexed), "מסמכים במאגר"],
+                [formatNumber(overview.chunks), "סעיפים מאונדקסים"],
+                [formatNumber(overview.contract_types.length), "סוגי מסמכים"],
+              ].map(([value, label]) => (
+                <div key={label} className="border-r-2 border-lavender pr-3">
+                  <dd className="font-serif text-[30px] leading-none font-bold tabular-nums">{value}</dd>
+                  <dt className="mt-1 text-[13px] text-muted">{label}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
           {overview && overview.indexed === 0 && (
             <p className="mt-6 max-w-xl rounded-md border border-rule-strong bg-white px-4 py-3 text-[14.5px]">
               המאגר עדיין ריק.{" "}
@@ -227,14 +245,28 @@ function ChatPage() {
               <li key={s} className="border-b border-rule">
                 <button
                   onClick={() => send(s)}
-                  className="group flex w-full items-center justify-between gap-4 py-3.5 text-right text-[15.5px] hover:text-ink-soft"
+                  className="group flex w-full items-center justify-between gap-4 py-3.5 text-right text-[15.5px] transition-colors hover:text-ink-soft"
                 >
-                  <span>{s}</span>
-                  <ArrowUp size={16} className="shrink-0 -rotate-90 text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="transition-transform group-hover:-translate-x-1">{s}</span>
+                  <ArrowUp size={16} className="shrink-0 -rotate-90 text-ink-soft opacity-0 transition-opacity group-hover:opacity-100" />
                 </button>
               </li>
             ))}
           </ul>
+          </div>
+
+          {/* The unit emblem, lit softly from behind. */}
+          <div className="relative hidden justify-center lg:flex" aria-hidden>
+            <div className="absolute inset-x-0 top-1/2 h-[70%] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(155_154_188/0.55),rgb(236_235_244/0.35)_55%,transparent)] blur-2xl" />
+            <Image
+              src="/emblem.png"
+              alt=""
+              width={295}
+              height={745}
+              priority
+              className="rise relative h-[min(68vh,560px)] w-auto drop-shadow-[0_30px_40px_rgba(30,36,84,0.28)]"
+            />
+          </div>
         </section>
       ) : (
         <div className="flex-1 pt-6 pb-8 lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">

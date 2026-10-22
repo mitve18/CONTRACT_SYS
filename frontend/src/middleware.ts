@@ -26,5 +26,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon.svg).*)"],
+  // Public static assets (emblem, icons) stay reachable so the login screen can show them.
+  matcher: ["/((?!_next/static|_next/image|.*\\.(?:png|svg|ico|jpg|webp)$).*)"],
 };
